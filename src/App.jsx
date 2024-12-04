@@ -1,35 +1,40 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import { Route, Routes } from 'react-router-dom';
+import NavBar from "./components/NarBar";
+import MailboxList from "./components/MailboxList";
+import MailboxForm from "./components/MailboxForm";
+import MailboxDetails from "./components/MailboxDetails";
 
-function App() {
-  const [count, setCount] = useState(0)
+
+const mailboxExample = {
+  _id: 1,
+  boxSize: 'Small',
+  boxholder: 'Alex',
+};
+
+
+const App = () => {
+  const [mailboxes, setMailboxes] = useState([mailboxExample]);
+
+  const addBox = (newMailbox) => {
+    newMailbox._id = mailboxes.lenght + 1
+    setMailboxes([ ...mailboxes, newMailbox ])
+  };
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+      <NavBar />
 
-export default App
+      <Routes>
+        <Route path="/" element={ <main><h1> Post Office </h1></main> } />
+        <Route path="/mailboxes" element={ <MailboxList mailboxes={mailboxes} /> } />
+        <Route path="/new-mailbox" element={ <MailboxForm addBox={addBox} /> } />
+        <Route path="/mailboxes/:mailboxId" element={ <MailboxDetails mailboxes={mailboxes} /> } />
+      </Routes>
+
+    </>
+  );
+};
+
+export default App;
+
